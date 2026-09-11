@@ -62,11 +62,6 @@ export default function Page() {
       return
     }
 
-    if (!selected) {
-      setSaveError('Vui lòng chọn một đáp án trước khi gửi.')
-      return
-    }
-
     const trimmedFavoriteName = favoriteName.trim()
     if (!trimmedFavoriteName) {
       setFavoriteNameError('Vui lòng nhập điều bạn yêu thích.')
@@ -74,6 +69,10 @@ export default function Page() {
     }
 
     setFavoriteNameError('')
+    setSaveError('')
+    setShowResult(true)
+    setIsSubmitting(true)
+
     setSaveError('')
     setIsSubmitting(true)
     try {
@@ -84,11 +83,11 @@ export default function Page() {
       })
       if (!response.ok) {
         setSaveError('Không thể lưu kết quả lúc này. Bạn vẫn có thể thử lại.')
+        setShowResult(false)
         return
       }
       const saved = await response.json()
       setSessionId(saved.id)
-      setShowResult(true)
     } catch {
       setSaveError('Không thể kết nối. Bạn vui lòng thử lại nhé.')
     } finally {
