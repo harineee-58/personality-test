@@ -41,6 +41,7 @@ export default function Page() {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false)
   const [favoriteNameError, setFavoriteNameError] = useState('')
   const [saveError, setSaveError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     void fetch('/api/views', { method: 'POST' })
@@ -74,18 +75,25 @@ export default function Page() {
 
     setFavoriteNameError('')
     setSaveError('')
-    const response = await fetch('/api/quiz', {
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('/api/quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ favoriteName: trimmedFavoriteName, answers, primaryResult: winners[0], secondaryResult: winners[1] }),
-    })
-    if (!response.ok) {
-      setSaveError('Không thể lưu kết quả lúc này. Bạn vẫn có thể thử lại.')
-      return
+      })
+      if (!response.ok) {
+        setSaveError('Không thể lưu kết quả lúc này. Bạn vẫn có thể thử lại.')
+        return
+      }
+      const saved = await response.json()
+      setSessionId(saved.id)
+      setShowResult(true)
+    } catch {
+      setSaveError('Không thể kết nối. Bạn vui lòng thử lại nhé.')
+    } finally {
+      setIsSubmitting(false)
     }
-    const saved = await response.json()
-    setSessionId(saved.id)
-    setShowResult(true)
   }
 
   async function submitFeedback() {
@@ -139,7 +147,7 @@ export default function Page() {
             {letters.map((letter) => <button key={letter} className={`option ${selected === letter ? 'selected' : ''}`} onClick={() => choose(letter)} role="radio" aria-checked={selected === letter}><span className="option-letter">{letter}</span><span>{question.options[letter]}</span>{selected === letter && <Check size={18} className="check-icon" />}</button>)}
           </div>
           {current === questions.length - 1 && <div className="age-gate"><label htmlFor="favorite-name">Hãy ghi tên của điều bạn yêu thích ở đây (loài hoa, thú cưng, món ăn...)</label><input id="favorite-name" type="text" value={favoriteName} onChange={(event) => setFavoriteName(event.target.value)} placeholder="Ví dụ: hoa hướng dương" />{favoriteNameError && <p className="form-error">{favoriteNameError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
-          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button className="next-button" onClick={next} disabled={current < questions.length - 1 && !selected}>{current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
+          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button type="button" className="next-button" onClick={next} disabled={isSubmitting || (current < questions.length - 1 && !selected)}>{isSubmitting ? 'Đang gửi...' : current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
         </section>
       </section>
       <footer className="disclaimer">Một hoạt động khám phá bản thân — không phải đánh giá tâm lý chuyên môn.</footer>

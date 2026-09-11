@@ -14,7 +14,7 @@
 :root { --background: #f7f4ed; --foreground: #24312b; --border: #d9ddd3; --primary: #426b54; --muted-foreground: #778178; }
 * { box-sizing: border-box; }
 html { background: var(--background); }
-body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-geist), Arial, sans-serif; }
+body { margin: 0; background: var(--background); color: var(--foreground); font-family: Cambria, Georgia, serif; }
 button, textarea, input { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .42; }
@@ -24,10 +24,11 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .brand-mark { width: 29px; height: 29px; display: grid; place-items: center; border-radius: 50%; background: #dfe9d8; color: #426b54; }
 .header-note, .disclaimer { color: #8a938a; text-transform: uppercase; letter-spacing: .12em; font-size: 10px; }
 .quiz-layout { display: grid; grid-template-columns: minmax(250px, .82fr) minmax(460px, 1.18fr); gap: clamp(40px, 9vw, 150px); align-items: center; width: 100%; max-width: 1130px; margin: auto; padding: 50px 0 58px; }
-.intro-panel { position: relative; padding: 30px 34px 32px; border-radius: 24px; background: rgba(255, 248, 228, .88); border: 1px solid rgba(255, 255, 255, .72); box-shadow: 0 18px 42px rgba(57, 39, 91, .16); backdrop-filter: blur(8px); }
+.intro-panel { position: relative; padding: 30px 34px 32px; border-radius: 24px; background: rgba(255, 252, 241, .9); border: 1px solid rgba(255, 248, 226, .7); box-shadow: 0 18px 42px rgba(57, 39, 91, .16); backdrop-filter: blur(8px); }
 .eyebrow, .block-label { margin: 0 0 20px; color: #63816a; letter-spacing: .18em; font-size: 10px; font-weight: 800; }
 .eyebrow span { color: #cc8b73; margin-left: 7px; }
 h1, h2, p { margin-top: 0; }
+h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Georgia, serif; }
 .intro-panel h1 { font-family: var(--font-geist), Arial, sans-serif; font-weight: 500; letter-spacing: -.04em; font-size: clamp(52px, 6vw, 84px); line-height: .94; margin-bottom: 28px; color: #30234d; }
 .intro-panel h1 em { color: #c77c68; font-style: italic; }
 .intro-copy { color: #514765; font-size: 15px; line-height: 1.7; max-width: 280px; }
