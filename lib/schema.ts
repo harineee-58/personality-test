@@ -1,9 +1,9 @@
 import { sql } from 'drizzle-orm'
-import { integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 export const quizSessions = pgTable('quiz_sessions', {
   id: uuid('id').default(sql`gen_random_uuid()`).primaryKey(),
-  age: integer('age').notNull(),
+  favoriteName: text('favorite_name').notNull(),
   answers: jsonb('answers').notNull(),
   primaryResult: text('primary_result').notNull(),
   secondaryResult: text('secondary_result'),

@@ -34,12 +34,12 @@ export default function Page() {
   const [current, setCurrent] = useState(0)
   const [answers, setAnswers] = useState<Partial<Record<number, Letter>>>({})
   const [showResult, setShowResult] = useState(false)
-  const [age, setAge] = useState('')
+  const [favoriteName, setFavoriteName] = useState('')
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [feedback, setFeedback] = useState('')
   const [feedbackChoice, setFeedbackChoice] = useState('')
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false)
-  const [ageError, setAgeError] = useState('')
+  const [favoriteNameError, setFavoriteNameError] = useState('')
   const [saveError, setSaveError] = useState('')
 
   useEffect(() => {
@@ -61,18 +61,18 @@ export default function Page() {
       return
     }
 
-    const parsedAge = Number(age)
-    if (!Number.isInteger(parsedAge) || parsedAge < 1 || parsedAge > 120) {
-      setAgeError('Vui lòng nhập tuổi hợp lệ để xem kết quả.')
+    const trimmedFavoriteName = favoriteName.trim()
+    if (!trimmedFavoriteName) {
+      setFavoriteNameError('Vui lòng nhập điều bạn yêu thích.')
       return
     }
 
-    setAgeError('')
+    setFavoriteNameError('')
     setSaveError('')
     const response = await fetch('/api/quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ age: parsedAge, answers, primaryResult: winners[0], secondaryResult: winners[1] }),
+      body: JSON.stringify({ favoriteName: trimmedFavoriteName, answers, primaryResult: winners[0], secondaryResult: winners[1] }),
     })
     if (!response.ok) {
       setSaveError('Không thể lưu kết quả lúc này. Bạn vẫn có thể thử lại.')
@@ -97,7 +97,7 @@ export default function Page() {
   function restart() {
     setAnswers({})
     setCurrent(0)
-    setAge('')
+    setFavoriteName('')
     setSessionId(null)
     setFeedback('')
     setFeedbackChoice('')
@@ -133,8 +133,8 @@ export default function Page() {
           <div className="options" role="radiogroup" aria-label={question.text}>
             {letters.map((letter) => <button key={letter} className={`option ${selected === letter ? 'selected' : ''}`} onClick={() => choose(letter)} role="radio" aria-checked={selected === letter}><span className="option-letter">{letter}</span><span>{question.options[letter]}</span>{selected === letter && <Check size={18} className="check-icon" />}</button>)}
           </div>
-          {current === questions.length - 1 && <div className="age-gate"><label htmlFor="age">Trước khi xem kết quả, bạn bao nhiêu tuổi?</label><input id="age" type="number" min="1" max="120" value={age} onChange={(event) => setAge(event.target.value)} placeholder="Nhập tuổi của bạn" />{ageError && <p className="form-error">{ageError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
-          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button className="next-button" onClick={next} disabled={!selected}>{current === questions.length - 1 ? 'Xem kết quả' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
+          {current === questions.length - 1 && <div className="age-gate"><label htmlFor="favorite-name">Hãy ghi tên của điều bạn yêu thích ở đây (loài hoa, thú cưng, món ăn...)</label><input id="favorite-name" type="text" value={favoriteName} onChange={(event) => setFavoriteName(event.target.value)} placeholder="Ví dụ: hoa hướng dương" />{favoriteNameError && <p className="form-error">{favoriteNameError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
+          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button className="next-button" onClick={next} disabled={!selected}>{current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
         </section>
       </section>
       <footer className="disclaimer">Một hoạt động khám phá bản thân — không phải đánh giá tâm lý chuyên môn.</footer>

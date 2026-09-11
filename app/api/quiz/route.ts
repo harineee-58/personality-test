@@ -5,13 +5,13 @@ import { quizSessions } from '@/lib/schema'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const age = Number(body.age)
-    if (!Number.isInteger(age) || age < 1 || age > 120) {
-      return NextResponse.json({ error: 'Tuổi không hợp lệ.' }, { status: 400 })
+    const favoriteName = String(body.favoriteName ?? '').trim()
+    if (!favoriteName || favoriteName.length > 120) {
+      return NextResponse.json({ error: 'Tên điều yêu thích không hợp lệ.' }, { status: 400 })
     }
 
     const [session] = await db.insert(quizSessions).values({
-      age,
+      favoriteName,
       answers: body.answers ?? {},
       primaryResult: String(body.primaryResult ?? ''),
       secondaryResult: body.secondaryResult ? String(body.secondaryResult) : null,

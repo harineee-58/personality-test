@@ -7,7 +7,7 @@ type Analytics = {
   tests: number
   feedbackCount: number
   resultBreakdown: { result: string; value: number }[]
-  recentSessions: { id: string; age: number; primaryResult: string; secondaryResult: string | null; createdAt: string }[]
+  recentSessions: { id: string; favoriteName: string; primaryResult: string; secondaryResult: string | null; createdAt: string }[]
   feedback: { id: string; answer: string; createdAt: string }[]
 }
 
@@ -57,7 +57,7 @@ export default function AdminPage() {
           <section className="admin-card"><h2>Kết quả chính</h2>{analytics.resultBreakdown.map((item) => <div className="breakdown-row" key={item.result}><span>{item.result}</span><strong>{item.value}</strong></div>)}</section>
           <section className="admin-card"><h2>Góc nhìn đã gửi</h2><div className="feedback-list">{analytics.feedback.length ? analytics.feedback.map((item) => <blockquote key={item.id}>{item.answer}<small>{new Date(item.createdAt).toLocaleString('vi-VN')}</small></blockquote>) : <p>Chưa có câu trả lời nào.</p>}</div></section>
         </div>
-        <section className="admin-card"><h2>Lượt làm bài gần đây</h2><div className="session-list">{analytics.recentSessions.map((session) => <div className="session-row" key={session.id}><span>{session.age} tuổi</span><strong>{session.primaryResult}{session.secondaryResult ? ` + ${session.secondaryResult}` : ''}</strong><small>{new Date(session.createdAt).toLocaleString('vi-VN')}</small></div>)}</div></section>
+        <section className="admin-card"><h2>Lượt làm bài gần đây</h2><div className="session-list">{analytics.recentSessions.map((session) => <div className="session-row" key={session.id}><span>{session.favoriteName}</span><strong>{session.primaryResult}{session.secondaryResult ? ` + ${session.secondaryResult}` : ''}</strong><small>{new Date(session.createdAt).toLocaleString('vi-VN')}</small></div>)}</div></section>
       </section>
     </main>
   )
