@@ -61,6 +61,11 @@ export default function Page() {
       return
     }
 
+    if (!selected) {
+      setSaveError('Vui lòng chọn một đáp án trước khi gửi.')
+      return
+    }
+
     const trimmedFavoriteName = favoriteName.trim()
     if (!trimmedFavoriteName) {
       setFavoriteNameError('Vui lòng nhập điều bạn yêu thích.')
@@ -134,7 +139,7 @@ export default function Page() {
             {letters.map((letter) => <button key={letter} className={`option ${selected === letter ? 'selected' : ''}`} onClick={() => choose(letter)} role="radio" aria-checked={selected === letter}><span className="option-letter">{letter}</span><span>{question.options[letter]}</span>{selected === letter && <Check size={18} className="check-icon" />}</button>)}
           </div>
           {current === questions.length - 1 && <div className="age-gate"><label htmlFor="favorite-name">Hãy ghi tên của điều bạn yêu thích ở đây (loài hoa, thú cưng, món ăn...)</label><input id="favorite-name" type="text" value={favoriteName} onChange={(event) => setFavoriteName(event.target.value)} placeholder="Ví dụ: hoa hướng dương" />{favoriteNameError && <p className="form-error">{favoriteNameError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
-          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button className="next-button" onClick={next} disabled={!selected}>{current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
+          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button className="next-button" onClick={next} disabled={current < questions.length - 1 && !selected}>{current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
         </section>
       </section>
       <footer className="disclaimer">Một hoạt động khám phá bản thân — không phải đánh giá tâm lý chuyên môn.</footer>
