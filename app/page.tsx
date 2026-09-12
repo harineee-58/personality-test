@@ -118,7 +118,7 @@ export default function Page() {
   }
 
   if (showResult) {
-    return <ResultView result={result} winners={winners} counts={counts} restart={restart} feedback={feedback} setFeedback={setFeedback} feedbackChoice={feedbackChoice} setFeedbackChoice={setFeedbackChoice} feedbackSubmitted={feedbackSubmitted} submitFeedback={submitFeedback} />
+    return <ThankYouView restart={restart} />
   }
 
   const selected = answers[question.number]
@@ -152,6 +152,13 @@ export default function Page() {
       <footer className="disclaimer">Một hoạt động khám phá bản thân — không phải đánh giá tâm lý chuyên môn.</footer>
     </main>
   )
+}
+
+function ThankYouView({ restart }: { restart: () => void }) {
+  return <main className="result-shell thank-you-shell">
+    <header className="site-header"><div className="brand"><span className="brand-mark"><Sparkles size={16} /></span><span>inner / compass</span></div><button className="restart-button" onClick={restart}><RotateCcw size={15} /> Làm lại</button></header>
+    <section className="thank-you-content"><p className="eyebrow">INNER / COMPASS <span>✦</span></p><div className="thank-you-card"><h1>Cảm ơn bạn đã kiên nhẫn yêu thương bản thân và dành thời gian nhìn lại bản thân.</h1><p>Vui lòng inbox mình để nhận kết quả nhé! ^^</p></div></section>
+  </main>
 }
 
 function ResultView({ result, winners, counts, restart, feedback, setFeedback, feedbackChoice, setFeedbackChoice, feedbackSubmitted, submitFeedback }: { result: (typeof results)[Letter]; winners: Letter[]; counts: Record<Letter, number>; restart: () => void; feedback: string; setFeedback: (value: string) => void; feedbackChoice: string; setFeedbackChoice: (value: string) => void; feedbackSubmitted: boolean; submitFeedback: () => void }) {

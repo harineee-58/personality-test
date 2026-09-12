@@ -66,3 +66,21 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Geor
 .age-gate input { background: rgba(255, 252, 241, .88); }
 .result-shell { background-color: #8c79bd; }
 .admin-shell { background-color: #8c79bd; }
+.thank-you-content { min-height: calc(100vh - 110px); display: grid; place-items: center; padding: 48px 24px; text-align: center; }
+.thank-you-card { max-width: 760px; padding: 56px 52px; border: 1px solid rgba(255,255,255,.7); border-radius: 28px; background: rgba(255,252,241,.9); box-shadow: 0 22px 60px rgba(55,39,89,.2); backdrop-filter: blur(8px); }
+.thank-you-card h1 { margin: 0 auto 22px; color: #30453a; font-size: clamp(30px, 5vw, 54px); line-height: 1.12; font-weight: 500; }
+.thank-you-card p { margin: 0; color: #6b4d78; font-size: 22px; }
+.admin-hint { color: #75677c; font-size: 13px; }
+.session-button { width: 100%; border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.session-button:hover { background: rgba(255,255,255,.58); }
+.admin-result-overlay { position: fixed; inset: 0; z-index: 10; overflow-y: auto; display: grid; place-items: center; padding: 28px; background: rgba(48,35,77,.58); }
+.admin-result-detail { position: relative; width: min(920px, 100%); max-height: calc(100vh - 56px); overflow-y: auto; padding: 44px; border-radius: 26px; background: rgba(255,252,241,.97); box-shadow: 0 24px 80px rgba(30,20,52,.32); }
+.detail-close { position: absolute; top: 20px; right: 22px; border: 1px solid #d5c8d2; border-radius: 999px; background: transparent; padding: 8px 14px; cursor: pointer; }
+.admin-result-detail h2 { margin: 10px 0 4px; color: #30453a; font-size: clamp(34px, 6vw, 70px); font-weight: 500; }
+.detail-name { color: #6b4d78; font-size: 18px; }
+.admin-result-detail .result-lead { max-width: 700px; color: #5a765f; font-size: 25px; line-height: 1.3; }
+.admin-result-detail .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 32px 0; padding-top: 24px; border-top: 1px solid #d5ded2; }
+.admin-result-detail blockquote { margin: 34px 0; color: #5a765f; font-size: 26px; line-height: 1.35; font-style: italic; }
+.answer-list { display: flex; flex-wrap: wrap; gap: 10px 22px; border-top: 1px solid #d5ded2; padding-top: 22px; color: #6b4d78; }
+.answer-list span { min-width: 120px; }
+@media (max-width: 700px) { .thank-you-card { padding: 38px 24px; } .admin-result-detail { padding: 32px 22px; } .admin-result-detail .result-grid { grid-template-columns: 1fr; gap: 18px; } }
