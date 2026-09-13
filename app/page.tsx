@@ -69,8 +69,8 @@ export default function Page() {
       setFavoriteNameError('Vui lòng nhập điều bạn yêu thích.')
       return
     }
-    if (!Number.isInteger(parsedAge) || parsedAge < 1 || parsedAge > 120) {
-      setSaveError('Vui lòng nhập độ tuổi hợp lệ từ 1 đến 120.')
+    if (!Number.isInteger(parsedAge) || parsedAge < 1900 || parsedAge > new Date().getFullYear()) {
+      setSaveError('Vui lòng nhập năm sinh hợp lệ từ 1900 đến hiện tại.')
       return
     }
 
@@ -152,7 +152,7 @@ export default function Page() {
           <div className="options" role="radiogroup" aria-label={question.text}>
             {letters.map((letter) => <button key={letter} className={`option ${selected === letter ? 'selected' : ''}`} onClick={() => choose(letter)} role="radio" aria-checked={selected === letter}><span className="option-letter">{letter}</span><span>{question.options[letter]}</span>{selected === letter && <Check size={18} className="check-icon" />}</button>)}
           </div>
-          {current === questions.length - 1 && <div className="age-gate"><label htmlFor="favorite-name">Hãy ghi tên của điều bạn yêu thích ở đây (loài hoa, thú cưng, món ăn...)</label><input id="favorite-name" type="text" value={favoriteName} onChange={(event) => setFavoriteName(event.target.value)} placeholder="Ví dụ: hoa hướng dương" /><label htmlFor="age">Độ tuổi của bạn</label><input id="age" type="number" min="1" max="120" value={age} onChange={(event) => setAge(event.target.value)} placeholder="Ví dụ: 25" />{favoriteNameError && <p className="form-error">{favoriteNameError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
+          {current === questions.length - 1 && <div className="age-gate"><label htmlFor="favorite-name">Hãy ghi tên của điều bạn yêu thích ở đây (loài hoa, thú cưng, món ăn...)</label><input id="favorite-name" type="text" value={favoriteName} onChange={(event) => setFavoriteName(event.target.value)} placeholder="Ví dụ: hoa hướng dương" /><label htmlFor="age">Bạn sinh năm bao nhiêu?</label><input id="age" type="number" min="1900" max={new Date().getFullYear()} value={age} onChange={(event) => setAge(event.target.value)} placeholder="Ví dụ: 2000" />{favoriteNameError && <p className="form-error">{favoriteNameError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
           <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button type="button" className="next-button" onClick={next} disabled={isSubmitting || (current < questions.length - 1 && !selected)}>{isSubmitting ? 'Đang gửi...' : current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
         </section>
       </section>

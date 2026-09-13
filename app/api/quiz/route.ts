@@ -10,8 +10,8 @@ export async function POST(request: Request) {
     if (!favoriteName || favoriteName.length > 120) {
       return NextResponse.json({ error: 'Tên điều yêu thích không hợp lệ.' }, { status: 400 })
     }
-    if (!Number.isInteger(age) || age < 1 || age > 120) {
-      return NextResponse.json({ error: 'Độ tuổi không hợp lệ.' }, { status: 400 })
+    if (!Number.isInteger(age) || age < 1900 || age > new Date().getFullYear()) {
+      return NextResponse.json({ error: 'Năm sinh không hợp lệ.' }, { status: 400 })
     }
 
     const [session] = await db.insert(quizSessions).values({
