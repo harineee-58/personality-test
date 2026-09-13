@@ -64,6 +64,7 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Geor
 .next-button, .feedback-submit, .admin-form button { background: #5f3c8d; }
 .age-gate { background: rgba(255, 244, 219, .72); border-color: rgba(255, 239, 195, .8); }
 .age-gate input { background: rgba(255, 252, 241, .88); }
+.age-gate label + input { margin-bottom: 14px; }
 .result-shell { background-color: #8c79bd; }
 .admin-shell { background-color: #8c79bd; }
 .thank-you-content { min-height: calc(100vh - 110px); display: grid; place-items: center; padding: 48px 24px; text-align: center; }
