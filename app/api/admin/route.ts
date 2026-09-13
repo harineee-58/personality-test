@@ -13,17 +13,27 @@ export async function GET(request: Request) {
   if (!authorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
+    const url = new URL(request.url)
+    const requestedPage = Number.parseInt(url.searchParams.get('page') ?? '1', 10)
+    const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1
+    const pageSize = 10
+    const offset = (page - 1) * pageSize
     const [viewCount] = await db.select({ value: count() }).from(quizViews)
     const [testCount] = await db.select({ value: count() }).from(quizSessions)
     const [feedbackCount] = await db.select({ value: count() }).from(quizFeedback)
+    const totalSessions = Number(testCount.value)
     const resultBreakdown = await db.select({ result: quizSessions.primaryResult, value: count() }).from(quizSessions).groupBy(quizSessions.primaryResult).orderBy(desc(count()))
-    const recentSessions = await db.select().from(quizSessions).orderBy(desc(quizSessions.createdAt)).limit(30)
+    const recentSessions = await db.select().from(quizSessions).orderBy(desc(quizSessions.createdAt)).limit(pageSize).offset(offset)
     const feedback = await db.select().from(quizFeedback).orderBy(desc(quizFeedback.createdAt)).limit(30)
 
     return NextResponse.json({
       views: viewCount.value,
       tests: testCount.value,
       feedbackCount: feedbackCount.value,
+      page,
+      pageSize,
+      totalSessions,
+      totalPages: Math.max(1, Math.ceil(totalSessions / pageSize)),
       resultBreakdown,
       recentSessions,
       feedback,

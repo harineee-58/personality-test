@@ -73,6 +73,13 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Geor
 .admin-hint { color: #75677c; font-size: 13px; }
 .session-button { width: 100%; border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; }
 .session-button:hover { background: rgba(255,255,255,.58); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 22px; color: #5f4b70; font-size: 14px; }
+.pagination button { border: 1px solid rgba(95,60,141,.28); border-radius: 999px; background: rgba(255,252,241,.78); color: #5f3c8d; padding: 9px 16px; cursor: pointer; font: inherit; }
+.pagination button:hover:not(:disabled) { background: #5f3c8d; color: #fff; }
+.pagination button:disabled { cursor: not-allowed; opacity: .45; }
+.pagination span { min-width: 150px; text-align: center; }
+.pagination small { color: #887b8f; }
+@media (max-width: 560px) { .pagination { gap: 8px; font-size: 12px; } .pagination button { padding: 8px 10px; } .pagination span { min-width: 112px; } }
 .admin-result-overlay { position: fixed; inset: 0; z-index: 10; overflow-y: auto; display: grid; place-items: center; padding: 28px; background: rgba(48,35,77,.58); }
 .admin-result-detail { position: relative; width: min(920px, 100%); max-height: calc(100vh - 56px); overflow-y: auto; padding: 44px; border-radius: 26px; background: rgba(255,252,241,.97); box-shadow: 0 24px 80px rgba(30,20,52,.32); }
 .detail-close { position: absolute; top: 20px; right: 22px; border: 1px solid #d5c8d2; border-radius: 999px; background: transparent; padding: 8px 14px; cursor: pointer; }
