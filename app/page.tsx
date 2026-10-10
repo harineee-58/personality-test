@@ -1,186 +1,42 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Sparkles } from 'lucide-react'
 
-type Letter = 'A' | 'B' | 'C' | 'D' | 'E'
-
-type Question = { number: number; text: string; options: Record<Letter, string> }
-
-const questions: Question[] = [
-  { number: 1, text: 'Khi đến một nơi hoàn toàn mới, bạn sẽ...', options: { A: 'Chủ động bắt chuyện với mọi người', B: 'Quan sát một lúc rồi mới hòa nhập', C: 'Tìm một người dễ nói chuyện để làm quen', D: 'Xem mình cần làm gì và bắt đầu luôn', E: 'Háo hức khám phá mọi thứ xung quanh' } },
-  { number: 2, text: 'Khi gặp một vấn đề khó, bạn thường...', options: { A: 'Làm trước, vừa làm vừa nghĩ', B: 'Phân tích thật kỹ', C: 'Tìm người mình tin tưởng để trao đổi', D: 'Lập kế hoạch giải quyết', E: 'Nghĩ một cách hoàn toàn khác' } },
-  { number: 3, text: 'Cuối tuần lý tưởng của bạn là...', options: { A: 'Đi chơi với bạn bè', B: 'Ở nhà tận hưởng thế giới riêng', C: 'Dành thời gian cho người mình yêu quý', D: 'Làm một việc giúp mình tiến bộ', E: 'Đi đâu đó chưa từng đi' } },
-  { number: 4, text: 'Khi kế hoạch bất ngờ thay đổi...', options: { A: '“Không sao, chơi tới!”', B: 'Hơi khó chịu vì mình chưa chuẩn bị', C: 'Miễn mọi người vẫn ổn là được', D: 'Nhanh chóng sắp xếp lại', E: '“Biết đâu kế hoạch mới còn vui hơn!”' } },
-  { number: 5, text: 'Bạn bè thường tìm đến bạn khi họ...', options: { A: 'Muốn tìm người kéo mood', B: 'Cần một lời khuyên', C: 'Cần người lắng nghe', D: 'Cần giúp giải quyết vấn đề', E: 'Cần một ý tưởng mới' } },
-  { number: 6, text: 'Điều khiến bạn khó chịu nhất là...', options: { A: 'Không khí quá nhàm chán', B: 'Bị ép phải giao tiếp quá nhiều', C: 'Người khác vô tâm', D: 'Sự thiếu trách nhiệm', E: 'Cuộc sống lặp đi lặp lại' } },
-  { number: 7, text: 'Nếu được cho 1 triệu để “thưởng cho bản thân”, bạn sẽ...', options: { A: 'Rủ bạn bè đi ăn/đi chơi', B: 'Mua thứ mình thích từ lâu', C: 'Mua gì đó cho người mình yêu quý', D: 'Đầu tư vào bản thân', E: 'Dùng cho một trải nghiệm mới' } },
-  { number: 8, text: 'Khi stress, bạn thường...', options: { A: 'Tìm người nói chuyện', B: 'Thu mình lại', C: 'Tìm một người khiến mình thấy an toàn', D: 'Tìm cách giải quyết nguyên nhân', E: 'Làm một thứ hoàn toàn khác để đổi mood' } },
-  { number: 9, text: 'Bạn muốn người khác nhớ đến mình vì...', options: { A: 'Năng lượng tích cực', B: 'Sự thông minh', C: 'Sự tử tế', D: 'Sự đáng tin cậy', E: 'Sự khác biệt' } },
-  { number: 10, text: 'Câu nào giống bạn nhất?', options: { A: '“Mình sống để trải nghiệm.”', B: '“Mình thích hiểu mọi thứ thật rõ.”', C: '“Mình trân trọng những người mình yêu thương.”', D: '“Mình muốn trở thành phiên bản tốt hơn.”', E: '“Mình không thích cuộc sống quá giống nhau.”' } },
-]
-
-const results: Record<Letter, { title: string; subtitle: string; color: string; strengths: string[]; note: string; quote: string; lead: string }> = {
-  A: { title: 'THE SPARK', subtitle: 'Người truyền năng lượng', color: 'sun', lead: 'Bạn là người mang năng lượng vào mọi cuộc vui.', strengths: ['Giao tiếp', 'Năng lượng', 'Linh hoạt'], note: 'Nhanh chán • Quyết định hơi vội', quote: 'Bạn không cần phải sáng cả ngày. Có những lúc bạn cũng được phép tắt đèn và nghỉ ngơi.' },
-  B: { title: 'THE THINKER', subtitle: 'Người quan sát', color: 'moon', lead: 'Bạn là người luôn có cả một thế giới đang diễn ra trong đầu.', strengths: ['Sâu sắc', 'Logic', 'Độc lập'], note: 'Nghĩ quá nhiều • Khó quyết định', quote: 'Không phải mọi thứ đều cần một câu trả lời hoàn hảo. Đôi khi cứ bắt đầu trước đã.' },
-  C: { title: 'THE CONNECTOR', subtitle: 'Người kết nối', color: 'rose', lead: 'Bạn là người khiến người khác cảm thấy được lắng nghe.', strengths: ['Đồng cảm', 'Tinh tế', 'Biết lắng nghe'], note: 'Nghĩ cho người khác quá nhiều • Khó nói “không”', quote: 'Bạn chăm sóc cảm xúc của mọi người rất tốt. Đừng quên để dành một phần sự dịu dàng đó cho chính mình.' },
-  D: { title: 'THE ACHIEVER', subtitle: 'Người chinh phục', color: 'fire', lead: 'Bạn là người đã muốn làm thì sẽ làm cho tới.', strengths: ['Quyết tâm', 'Kỷ luật', 'Đáng tin cậy'], note: 'Tự tạo áp lực • Khó cho phép bản thân nghỉ ngơi', quote: 'Bạn không cần phải lúc nào cũng tiến về phía trước. Nghỉ một chút cũng là một phần của hành trình.' },
-  E: { title: 'THE EXPLORER', subtitle: 'Người khám phá', color: 'blue', lead: 'Bạn là người không thích sống một cuộc đời được viết sẵn.', strengths: ['Sáng tạo', 'Tò mò', 'Thích nghi'], note: 'Dễ chán • Nhiều ý tưởng nhưng khó theo đến cùng', quote: 'Không cần biết con đường nào là hoàn hảo. Quan trọng là bạn vẫn còn muốn khám phá.' },
+type Id = 'spark'|'thinker'|'connector'|'builder'|'explorer'|'dreamer'|'anchor'|'pathfinder'
+const ids: Id[] = ['spark','thinker','connector','builder','explorer','dreamer','anchor','pathfinder']
+const profiles: Record<Id,{title:string;sub:string;lead:string;strengths:string[];watch:string;quote:string}> = {
+ spark:{title:'THE SPARK',sub:'Người truyền năng lượng',lead:'Bạn mang sự sống động vào không gian và dễ truyền cảm hứng cho người khác.',strengths:['Cởi mở','Linh hoạt','Truyền cảm hứng'],watch:'Đừng quên nghỉ ngơi giữa nhịp độ nhanh.',quote:'Bạn không phải luôn toả sáng.'},
+ thinker:{title:'THE THINKER',sub:'Người nhìn sâu',lead:'Bạn thích hiểu đến tận gốc và nhìn ra những điều người khác dễ bỏ qua.',strengths:['Sâu sắc','Logic','Độc lập'],watch:'Một bước nhỏ thường tốt hơn một kế hoạch hoàn hảo.',quote:'Không phải mọi câu hỏi đều cần đáp án ngay.'},
+ connector:{title:'THE CONNECTOR',sub:'Người kết nối',lead:'Bạn khiến người khác cảm thấy được lắng nghe và thuộc về.',strengths:['Đồng cảm','Tinh tế','Tin cậy'],watch:'Sự quan tâm cũng cần có ranh giới.',quote:'Hãy dành cho mình sự dịu dàng bạn dành cho mọi người.'},
+ builder:{title:'THE BUILDER',sub:'Người kiến tạo',lead:'Bạn biến ý định thành cấu trúc và từng bước làm điều đó thành hiện thực.',strengths:['Kỷ luật','Bền bỉ','Thực tế'],watch:'Giá trị của bạn không chỉ nằm ở hiệu quả.',quote:'Nghỉ giữa hành trình không làm bạn lạc hướng.'},
+ explorer:{title:'THE EXPLORER',sub:'Người khám phá',lead:'Bạn được nuôi dưỡng bởi điều mới, những trải nghiệm lạ và các khả năng mở.',strengths:['Tò mò','Thích nghi','Can đảm'],watch:'Chọn một điều đủ quan trọng để đi cùng lâu hơn.',quote:'Không cần thấy hết bản đồ mới có thể lên đường.'},
+ dreamer:{title:'THE DREAMER',sub:'Người mơ mở lối',lead:'Bạn nhìn thấy khả năng mà người khác chưa kịp gọi tên.',strengths:['Sáng tạo','Trực giác','Tưởng tượng'],watch:'Ý tưởng đẹp sẽ mạnh hơn khi có một bước bắt đầu.',quote:'Điều bạn hình dung hôm nay có thể tạo hy vọng ngày mai.'},
+ anchor:{title:'THE ANCHOR',sub:'Người giữ nhịp',lead:'Sự bình tĩnh của bạn giúp mọi người có một nơi để quay về.',strengths:['Điềm tĩnh','Kiên định','Chu đáo'],watch:'Bạn cũng được phép nói ra điều mình cần.',quote:'Bạn có thể là chốn an toàn cho người khác và cho mình.'},
+ pathfinder:{title:'THE PATHFINDER',sub:'Người mở đường',lead:'Bạn thấy được hướng đi khi mọi thứ còn mơ hồ và giúp mọi người cùng tiến lên.',strengths:['Chủ động','Quyết đoán','Dẫn dắt'],watch:'Chậm lại để lắng nghe có thể làm con đường rộng hơn.',quote:'Dẫn đường là giúp mọi người biết mình đang đi đâu.'},
 }
-
-const letters: Letter[] = ['A', 'B', 'C', 'D', 'E']
+const sections = ['NẠP NĂNG LƯỢNG','CÁCH BẠN SUY NGHĨ','KẾT NỐI','HÀNH ĐỘNG']
+const prompts = [
+ 'Sau một tuần bận rộn, điều nào thật sự giúp bạn hồi phục?','Trong căn phòng đầy người lạ, bạn thường làm gì?','Một ngày không có lịch trình, bạn muốn bắt đầu bằng điều gì?','Điều gì làm bạn cảm thấy mình đang sống đúng nhất?','Khi có một vấn đề phức tạp, phản xạ đầu tiên của bạn là gì?','Khi học điều mới, bạn thích cách nào nhất?',
+ 'Bạn tin tưởng một quyết định khi điều gì đúng?','Một ý tưởng mới hấp dẫn bạn nhất khi nó như thế nào?','Khi gặp thông tin trái chiều, bạn thường làm gì?','Điều gì khiến bạn thay đổi quan điểm?','Bạn thích được người khác hỏi ý kiến về điều gì?','Bạn xử lý lỗi của mình như thế nào?',
+ 'Bạn bè thường tìm đến bạn khi họ cần gì?','Khi một người thân buồn, bạn thường làm gì?','Trong làm việc nhóm, vai trò tự nhiên của bạn là gì?','Một cuộc trò chuyện đáng nhớ với bạn là gì?','Bạn xử lý bất đồng bằng cách nào?','Bạn muốn người khác nhớ đến mình vì điều gì?',
+ 'Khi kế hoạch bỗng thay đổi, bạn dễ làm gì?','Đứng trước cơ hội mới, bạn thường làm gì?','Điều gì khiến bạn tự hào nhất về mình?','Khi bắt đầu dự án, điều nào khiến bạn hào hứng?','Lúc áp lực, bạn cần điều gì nhất?','Câu nào gần với bạn nhất?'
+]
+const choiceSets = [
+ ['Gặp gỡ và chia sẻ năng lượng với mọi người','Ở yên, quan sát và lắng nghe chính mình','Thử một nơi hoặc trải nghiệm hoàn toàn mới','Sắp xếp lại để mọi thứ rõ ràng hơn'],
+ ['Tìm dữ kiện và phân tích kỹ','Lắng nghe điều mọi người thật sự cần','Nghĩ ra một góc nhìn chưa ai thử','Chốt một hướng đi rồi bắt đầu'],
+ ['Kết nối để mọi người cảm thấy được thuộc về','Lắng nghe, quan sát và giữ nhịp bình tĩnh','Mở ra một ý tưởng hoặc trải nghiệm khác','Sắp xếp việc cần làm để nhóm tiến lên'],
+ ['Linh hoạt nắm lấy cơ hội mới','Cân nhắc kỹ trước khi quyết định','Tưởng tượng một khả năng thú vị hơn','Lập kế hoạch và hành động từng bước'],
+]
+const scorePairs: Id[][] = [['spark','connector'],['thinker','anchor'],['explorer','dreamer'],['builder','pathfinder']]
 
 export default function Page() {
-  const [current, setCurrent] = useState(0)
-  const [answers, setAnswers] = useState<Partial<Record<number, Letter>>>({})
-  const [showResult, setShowResult] = useState(false)
-  const [favoriteName, setFavoriteName] = useState('')
-  const [age, setAge] = useState('')
-  const [sessionId, setSessionId] = useState<string | null>(null)
-  const [feedback, setFeedback] = useState('')
-  const [feedbackChoice, setFeedbackChoice] = useState('')
-  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false)
-  const [favoriteNameError, setFavoriteNameError] = useState('')
-  const [saveError, setSaveError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  useEffect(() => {
-    void fetch('/api/views', { method: 'POST' })
-  }, [])
-
-  const counts = useMemo(() => letters.reduce((acc, letter) => ({ ...acc, [letter]: Object.values(answers).filter((answer) => answer === letter).length }), {} as Record<Letter, number>), [answers])
-  const winners = letters.filter((letter) => counts[letter] === Math.max(...letters.map((item) => counts[item])))
-  const result = results[winners[0]]
-  const question = questions[current]
-
-  function choose(letter: Letter) {
-    setAnswers((previous) => ({ ...previous, [question.number]: letter }))
-  }
-
-  async function next() {
-    if (current < questions.length - 1) {
-      setCurrent((value) => value + 1)
-      return
-    }
-
-    const trimmedFavoriteName = favoriteName.trim()
-    const parsedAge = Number(age)
-    if (!trimmedFavoriteName) {
-      setFavoriteNameError('Vui lòng nhập điều bạn yêu thích.')
-      return
-    }
-    if (!Number.isInteger(parsedAge) || parsedAge < 1900 || parsedAge > new Date().getFullYear()) {
-      setSaveError('Vui lòng nhập năm sinh hợp lệ từ 1900 đến hiện tại.')
-      return
-    }
-
-    setFavoriteNameError('')
-    setSaveError('')
-    setShowResult(true)
-    setIsSubmitting(true)
-
-    setSaveError('')
-    setIsSubmitting(true)
-    try {
-      const response = await fetch('/api/quiz', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ favoriteName: trimmedFavoriteName, age: parsedAge, answers, primaryResult: winners[0], secondaryResult: winners[1] }),
-      })
-      if (!response.ok) {
-        setSaveError('Không thể lưu kết quả lúc này. Bạn vẫn có thể thử lại.')
-        setShowResult(false)
-        return
-      }
-      const saved = await response.json()
-      setSessionId(saved.id)
-    } catch {
-      setSaveError('Không thể kết nối. Bạn vui lòng thử lại nhé.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  async function submitFeedback() {
-    const answer = feedback.trim() || feedbackChoice
-    if (!answer) return
-    const response = await fetch('/api/feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, answer }),
-    })
-    if (response.ok) setFeedbackSubmitted(true)
-  }
-
-  function restart() {
-    setAnswers({})
-    setCurrent(0)
-    setFavoriteName('')
-    setAge('')
-    setSessionId(null)
-    setFeedback('')
-    setFeedbackChoice('')
-    setFeedbackSubmitted(false)
-    setShowResult(false)
-  }
-
-  if (showResult) {
-    return <ThankYouView restart={restart} />
-  }
-
-  const selected = answers[question.number]
-  const progress = Math.round(((current + (selected ? 1 : 0)) / questions.length) * 100)
-
-  return (
-    <main className="quiz-shell">
-      <header className="site-header">
-        <div className="brand"><span className="brand-mark"><Sparkles size={16} /></span><span>inner / compass</span></div>
-        <span className="header-note">khám phá bản thân · 2026</span>
-      </header>
-      <section className="quiz-layout">
-        <aside className="intro-panel">
-          <p className="eyebrow">PERSONALITY TEST <span>✦</span></p>
-          <h1>Bạn thuộc<br /><em>kiểu người</em> nào?</h1>
-          <p className="intro-copy">10 câu hỏi nhỏ. Một góc nhìn mới về chính bạn.</p>
-          <div className="flower-doodle" aria-hidden="true">✾</div>
-          <p className="side-tip"><strong>Tip:</strong> Đừng nghĩ quá lâu. Hãy chọn theo phản ứng đầu tiên của bạn nhé.</p>
-        </aside>
-        <section className="question-card" aria-live="polite">
-          <div className="progress-row"><span>CÂU {String(current + 1).padStart(2, '0')} <i>/ 10</i></span><span>{progress}%</span></div>
-          <div className="progress-track"><span style={{ width: `${((current + (selected ? 1 : 0)) / questions.length) * 100}%` }} /></div>
-          <div className="question-heading"><span className="question-number">{String(question.number).padStart(2, '0')}</span><h2>{question.text}</h2></div>
-          <div className="options" role="radiogroup" aria-label={question.text}>
-            {letters.map((letter) => <button key={letter} className={`option ${selected === letter ? 'selected' : ''}`} onClick={() => choose(letter)} role="radio" aria-checked={selected === letter}><span className="option-letter">{letter}</span><span>{question.options[letter]}</span>{selected === letter && <Check size={18} className="check-icon" />}</button>)}
-          </div>
-          {current === questions.length - 1 && <div className="age-gate"><label htmlFor="favorite-name">Hãy ghi tên của điều bạn yêu thích ở đây (loài hoa, thú cưng, món ăn...)</label><input id="favorite-name" type="text" value={favoriteName} onChange={(event) => setFavoriteName(event.target.value)} placeholder="Ví dụ: hoa hướng dương" /><label htmlFor="age">Bạn sinh năm bao nhiêu?</label><input id="age" type="number" min="1900" max={new Date().getFullYear()} value={age} onChange={(event) => setAge(event.target.value)} placeholder="Ví dụ: 2000" />{favoriteNameError && <p className="form-error">{favoriteNameError}</p>}{saveError && <p className="form-error">{saveError}</p>}</div>}
-          <div className="card-footer"><button className="back-button" onClick={() => setCurrent((value) => Math.max(0, value - 1))} disabled={current === 0}><ArrowLeft size={16} /> Quay lại</button><button type="button" className="next-button" onClick={next} disabled={isSubmitting || (current < questions.length - 1 && !selected)}>{isSubmitting ? 'Đang gửi...' : current === questions.length - 1 ? 'Gửi' : 'Tiếp theo'} <ArrowRight size={17} /></button></div>
-        </section>
-      </section>
-      <footer className="disclaimer">Một hoạt động khám phá bản thân — không phải đánh giá tâm lý chuyên môn.</footer>
-    </main>
-  )
+ const [current,setCurrent]=useState(0), [answers,setAnswers]=useState<Record<number,number>>({}), [done,setDone]=useState(false)
+ const scores=useMemo(()=>{const s=Object.fromEntries(ids.map(id=>[id,0])) as Record<Id,number>;Object.entries(answers).forEach(([,choice])=>scorePairs[choice].forEach(id=>s[id]++));return s},[answers])
+ const ranked=[...ids].sort((a,b)=>scores[b]-scores[a]||a.localeCompare(b)); const selected=answers[current]
+ if(done) return <Result primary={ranked[0]} secondary={ranked[1]} scores={scores} restart={()=>{setAnswers({});setCurrent(0);setDone(false)}} />
+ const section=Math.floor(current/6), progress=Math.round((Object.keys(answers).length/prompts.length)*100)
+ return <main className="quiz-shell inner-compass-shell"><header className="site-header"><div className="brand"><span className="brand-mark"><Sparkles size={16}/></span>inner / compass</div><span className="header-note">bản đồ năng lượng cá nhân</span></header><section className="quiz-layout"><aside className="intro-panel"><p className="eyebrow">INNER COMPASS ✦</p><h1>Điều gì<br/><em>đang dẫn lối</em> bạn?</h1><p className="intro-copy">24 tình huống ngắn để vẽ bản đồ về cách bạn nạp năng lượng, suy nghĩ, kết nối và hành động.</p><div className="compass-orbit">✦</div><p className="side-tip"><strong>Khoảng 5 phút.</strong> Chọn phản ứng gần bạn nhất, không phải điều bạn nghĩ mình nên làm.</p></aside><section className="question-card"><div className="progress-row"><span>{sections[section]} <i>· {String(current+1).padStart(2,'0')} / 24</i></span><span>{progress}%</span></div><div className="progress-track"><span style={{width:`${progress}%`}}/></div><div className="question-heading"><span className="question-number">{String(current+1).padStart(2,'0')}</span><h2>{prompts[current]}</h2></div><div className="options" role="radiogroup">{choiceSets[section].map((text,index)=><button key={text} className={`option ${selected===index?'selected':''}`} onClick={()=>setAnswers(a=>({...a,[current]:index}))}><span className="option-letter">{String.fromCharCode(65+index)}</span><span>{text}</span>{selected===index&&<Check size={18} className="check-icon"/>}</button>)}</div><div className="card-footer"><button className="back-button" disabled={!current} onClick={()=>setCurrent(x=>x-1)}><ArrowLeft size={16}/> Quay lại</button><button className="next-button" disabled={selected===undefined} onClick={()=>current===23?setDone(true):setCurrent(x=>x+1)}>{current===23?'Xem bản đồ':'Tiếp theo'} <ArrowRight size={17}/></button></div></section></section><footer className="disclaimer">Một hoạt động khám phá bản thân — không phải đánh giá tâm lý chuyên môn.</footer></main>
 }
 
-function ThankYouView({ restart }: { restart: () => void }) {
-  return <main className="result-shell thank-you-shell">
-    <header className="site-header"><div className="brand"><span className="brand-mark"><Sparkles size={16} /></span><span>inner / compass</span></div><button className="restart-button" onClick={restart}><RotateCcw size={15} /> Làm lại</button></header>
-    <section className="thank-you-content"><p className="eyebrow">INNER / COMPASS <span>✦</span></p><div className="thank-you-card"><h1>Cảm ơn bạn đã kiên nhẫn yêu thương bản thân và dành thời gian nhìn lại bản thân.</h1><p>Vui lòng inbox mình để nhận kết quả nhé! ^^</p></div></section>
-  </main>
-}
-
-function ResultView({ result, winners, counts, restart, feedback, setFeedback, feedbackChoice, setFeedbackChoice, feedbackSubmitted, submitFeedback }: { result: (typeof results)[Letter]; winners: Letter[]; counts: Record<Letter, number>; restart: () => void; feedback: string; setFeedback: (value: string) => void; feedbackChoice: string; setFeedbackChoice: (value: string) => void; feedbackSubmitted: boolean; submitFeedback: () => void }) {
-  return <main className={`result-shell result-${result.color}`}>
-    <header className="site-header"><div className="brand"><span className="brand-mark"><Sparkles size={16} /></span><span>inner / compass</span></div><button className="restart-button" onClick={restart}><RotateCcw size={15} /> Làm lại</button></header>
-    <section className="result-content">
-      <p className="eyebrow">KẾT QUẢ CỦA BẠN <span>✦</span></p>
-      <div className="result-orbit"><span className="orbit-dot" /><span className="result-letter">{winners.join(' × ')}</span></div>
-      <h1>{result.title}</h1><p className="result-subtitle">{result.subtitle}</p>
-      <p className="result-lead">{result.lead}</p>
-      {winners.length > 1 && <p className="tie-note">Bạn có tính cách kết hợp — hai nguồn năng lượng cùng nổi trội.</p>}
-      <div className="result-grid"><div className="result-block"><p className="block-label">ĐIỂM MẠNH CỦA BẠN</p><div className="strength-list">{result.strengths.map((strength) => <span key={strength}>✦ {strength}</span>)}</div></div><div className="result-block note-block"><p className="block-label">BẠN CẦN CHÚ Ý</p><p>{result.note}</p></div></div>
-      <blockquote>“{result.quote}”</blockquote>
-      <div className="reflection"><div><p className="block-label">ĐỂ LẠI MỘT GÓC NHÌN</p><h2>Kết quả này giống bạn bao nhiêu?</h2></div><div className="percent-pills">{['0–30%', '31–60%', '61–80%', '81–100%'].map((choice) => <button key={choice} className={feedbackChoice === choice ? 'selected' : ''} onClick={() => setFeedbackChoice(choice)}>{choice}</button>)}</div><textarea value={feedback} onChange={(event) => setFeedback(event.target.value)} placeholder="Điều gì trong kết quả khiến bạn bất ngờ nhất?" aria-label="Điều gì trong kết quả khiến bạn bất ngờ nhất?" /><button className="feedback-submit" type="button" onClick={submitFeedback} disabled={!feedbackChoice && !feedback.trim()}>Gửi góc nhìn</button>{feedbackSubmitted && <div className="after-submit"><p>“Trong đời này nhiều khi cơ hội chỉ đến một lần, nếu như chúng ta bỏ qua, thì sẽ là mất đi mãi mãi.”</p><strong>Bạn đã sẵn sàng để học yêu chính bản thân mình chưa?</strong><span>Contact cho mình để mình cùng lắng nghe câu chuyện của bạn nhé!</span></div>}</div>
-      <div className="score-strip">{letters.map((letter) => <span key={letter}><b>{letter}</b>{counts[letter]}</span>)}</div>
-    </section><footer className="disclaimer">Cảm ơn bạn đã dành một chút thời gian để lắng nghe chính mình.</footer>
-  </main>
-}
+function Result({primary,secondary,scores,restart}:{primary:Id;secondary:Id;scores:Record<Id,number>;restart:()=>void}){const p=profiles[primary],max=Math.max(...Object.values(scores),1);const dimensions=[['Kết nối',['spark','connector']],['Chiều sâu',['thinker','anchor']],['Khám phá',['explorer','dreamer']],['Hành động',['builder','pathfinder']]] as const;return <main className="result-shell inner-result"><header className="site-header"><div className="brand"><span className="brand-mark"><Sparkles size={16}/></span>inner / compass</div><button className="restart-button" onClick={restart}><RotateCcw size={15}/> Làm lại</button></header><section className="result-content"><p className="eyebrow">BẢN ĐỒ NĂNG LƯỢNG CỦA BẠN ✦</p><div className="result-orbit"><span className="result-letter">✦</span></div><h1>{p.title}</h1><p className="result-subtitle">{p.sub} · Năng lượng phụ: {profiles[secondary].sub}</p><p className="result-lead">{p.lead}</p><div className="compass-report"><p className="block-label">LA BÀN CỦA BẠN</p>{dimensions.map(([label,group])=>{const value=Math.round(group.reduce((n,id)=>n+scores[id],0)/(max*2)*100);return <div className="dimension-row" key={label}><span>{label}</span><div><i style={{width:`${Math.max(12,value)}%`}}/></div><b>{value}%</b></div>})}</div><div className="result-grid"><div><p className="block-label">ĐIỂM MẠNH</p><div className="strength-list">{p.strengths.map(x=><span key={x}>✦ {x}</span>)}</div></div><div className="note-block"><p className="block-label">ĐIỀU GIÚP BẠN CÂN BẰNG</p><p>{p.watch}</p></div></div><blockquote>“{p.quote}”</blockquote><div className="seven-day-card"><p className="block-label">THỬ THÁCH 7 NGÀY</p><h2>Mỗi ngày, ghi lại một khoảnh khắc bạn cảm thấy mình sống đúng với năng lượng này.</h2><p>Cuối tuần, nhìn lại điều gì làm bạn sáng lên và điều gì khiến bạn hụt năng lượng.</p></div></section></main>}
