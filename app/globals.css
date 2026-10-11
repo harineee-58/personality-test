@@ -14,7 +14,7 @@
 :root { --background: #f7f4ed; --foreground: #24312b; --border: #d9ddd3; --primary: #426b54; --muted-foreground: #778178; }
 * { box-sizing: border-box; }
 html { background: var(--background); }
-body { margin: 0; background: var(--background); color: var(--foreground); font-family: Cambria, Georgia, serif; }
+body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-geist), Arial, sans-serif; }
 button, textarea, input { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .42; }
@@ -28,8 +28,8 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .eyebrow, .block-label { margin: 0 0 20px; color: #63816a; letter-spacing: .18em; font-size: 10px; font-weight: 800; }
 .eyebrow span { color: #cc8b73; margin-left: 7px; }
 h1, h2, p { margin-top: 0; }
-h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Georgia, serif; }
-.intro-panel h1 { font-family: Cambria, Georgia, serif; font-weight: 500; letter-spacing: -.04em; font-size: clamp(52px, 6vw, 84px); line-height: .94; margin-bottom: 28px; color: #30234d; }
+h1, h2, h3, p, button, input, textarea, label, span { font-family: var(--font-geist), Arial, sans-serif; }
+.intro-panel h1 { font-family: var(--font-geist), Arial, sans-serif; font-weight: 500; letter-spacing: -.04em; font-size: clamp(52px, 6vw, 84px); line-height: .94; margin-bottom: 28px; color: #30234d; }
 .intro-panel h1 em { color: #c77c68; font-style: normal; }
 .intro-copy { color: #514765; font-size: 15px; line-height: 1.7; max-width: 280px; }
 .flower-doodle { color: #d49678; font-size: 104px; line-height: 1; position: absolute; right: 4%; top: 42%; transform: rotate(16deg); opacity: .75; }
@@ -39,7 +39,7 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Geor
 .progress-row { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .14em; color: #63816a; font-weight: 800; }
 .progress-row i { font-style: normal; color: #aab3aa; }
 .progress-track { background: #e7ebe3; height: 4px; margin: 12px 0 44px; border-radius: 4px; overflow: hidden; }.progress-track span { display: block; height: 100%; background: #426b54; transition: width .35s ease; }
-.question-heading { display: flex; gap: 19px; align-items: flex-start; margin-bottom: 30px; }.question-number { color: #d18a72; font-family: var(--font-geist), Arial, sans-serif; font-size: 28px; line-height: 1.1; }.question-heading h2 { color: #30453a; font-family: Cambria, Georgia, serif; font-weight: 400; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.025em; line-height: 1.16; max-width: 480px; }
+.question-heading { display: flex; gap: 19px; align-items: flex-start; margin-bottom: 30px; }.question-number { color: #d18a72; font-family: var(--font-geist), Arial, sans-serif; font-size: 28px; line-height: 1.1; }.question-heading h2 { color: #30453a; font-family: var(--font-geist), Arial, sans-serif; font-weight: 400; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.025em; line-height: 1.16; max-width: 480px; }
 .options { display: grid; gap: 10px; }.option { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; padding: 13px 14px; color: #57665b; background: transparent; border: 1px solid #e2e6de; transition: .2s ease; font-size: 13px; line-height: 1.4; }.option:hover { border-color: #9eb5a0; background: #f5f8f1; }.option.selected { border-color: #426b54; background: #edf4e9; color: #304d3b; }.option-letter { width: 25px; height: 25px; display: grid; place-items: center; border: 1px solid #cbd5c9; border-radius: 50%; color: #6c7c70; font-size: 11px; font-weight: 700; flex: 0 0 auto; }.selected .option-letter { background: #426b54; color: #fff; border-color: #426b54; }.check-icon { margin-left: auto; color: #426b54; }
 .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 34px; }.back-button, .restart-button { border: 0; background: transparent; color: #88938a; display: inline-flex; align-items: center; gap: 7px; font-size: 12px; }.next-button, .feedback-submit, .admin-form button { border: 0; background: #426b54; color: #fff; padding: 13px 18px; display: inline-flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; }
 .age-gate { display: grid; gap: 8px; margin-top: 24px; padding: 16px; border: 1px solid #dbe3d7; background: #f4f8ef; }.age-gate label { color: #426b54; font-size: 13px; font-weight: 700; }.age-gate input, .admin-form input { border: 1px solid #cbd8c8; background: #fffdf8; color: #30453a; padding: 11px 12px; outline: none; }.age-gate input:focus, .admin-form input:focus { border-color: #426b54; }.form-error, .admin-error { color: #b55e4c; font-size: 12px; margin: 0; }
@@ -99,3 +99,23 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Geor
 .answer-list { display: flex; flex-wrap: wrap; gap: 10px 22px; border-top: 1px solid #d5ded2; padding-top: 22px; color: #6b4d78; }
 .answer-list span { min-width: 120px; }
 @media (max-width: 700px) { .thank-you-card { padding: 38px 24px; } .admin-result-detail { padding: 32px 22px; } .admin-result-detail .result-grid { grid-template-columns: 1fr; gap: 18px; } }
+
+.flower-background { background-color: #f6f0e8; background-image: linear-gradient(rgba(249, 245, 237, .7), rgba(249, 245, 237, .7)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/_-A8nYq5esseEe9hbz0v3PLiMCGx6G8R.jpeg'); background-size: 720px auto; background-position: center top; background-attachment: fixed; color: #342650; }
+.flower-background::before { background: rgba(255, 250, 241, .2); }
+.landing-shell { min-height: 100vh; padding: 26px clamp(22px, 8vw, 120px) 42px; display: flex; flex-direction: column; }
+.landing-content { width: min(100%, 620px); margin: auto; padding: 48px 0 18px; position: relative; z-index: 1; }
+.landing-content h1 { margin: 0 0 38px; color: #30234d; font-size: clamp(64px, 11vw, 132px); font-weight: 500; line-height: .84; letter-spacing: -.065em; }
+.landing-content h1 em { color: #c77c68; font-style: normal; }
+.landing-copy { max-width: 470px; color: #514765; font-size: clamp(22px, 3vw, 31px); line-height: 1.55; margin-bottom: 44px; }
+.landing-content .eyebrow { color: #5f4b70; }
+.compass-orbit { width: 146px; height: 146px; margin: 38px 0 54px; font-size: 38px; }
+.landing-rule { width: 100%; height: 1px; background: rgba(82, 62, 102, .25); }
+.landing-tip { max-width: 470px; color: #625477; font-size: 19px; line-height: 1.6; margin: 34px 0 26px; }
+.landing-tip strong { color: #426b54; }
+.start-button { border: 0; background: #5f3c8d; color: #fff; padding: 15px 21px; display: inline-flex; align-items: center; gap: 13px; font-size: 14px; }
+.question-page { width: min(100%, 760px); margin: auto; padding: 42px 0 56px; position: relative; z-index: 1; }
+.question-card { border-radius: 18px; }
+.option { font-size: 16px; padding: 16px; color: #514765; }
+.option:hover { border-color: #9a7bc8; background: #faf5f1; }.option.selected { border-color: #5f3c8d; background: #f0e9f7; color: #342650; }.selected .option-letter { background: #5f3c8d; border-color: #5f3c8d; }
+.result-content { position: relative; z-index: 1; }.result-content h1 { color: #30234d; }.result-content .result-lead { color: #514765; }.result-quote { max-width: 600px; margin: 18px auto; color: #c17664; font-size: 23px; line-height: 1.4; font-style: italic; }.message-block, .action-card { text-align: left; background: rgba(255, 252, 241, .85); border: 1px solid rgba(215, 207, 232, .9); padding: 24px; margin: 22px 0; }.message-block p:last-child { color: #514765; font-size: 16px; line-height: 1.65; margin: 0; }.watch-list p { color: #6c6579; font-size: 13px; line-height: 1.5; margin: 0 0 8px; }.action-card { background: #f0e9f7; border-color: #cbb8e3; }.action-card h2 { color: #3f3654; font-size: 24px; line-height: 1.4; font-weight: 500; margin: 0; }
+@media (max-width: 560px) { .landing-content { padding-top: 28px; }.landing-content h1 { font-size: 70px; }.landing-copy { font-size: 21px; }.landing-tip { font-size: 17px; }.question-page { padding-top: 24px; }.option { font-size: 14px; }.result-quote { font-size: 20px; } }
