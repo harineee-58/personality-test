@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -106,13 +107,13 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: var(--font-ge
 .landing-content { width: min(100%, 620px); margin: auto; padding: 48px 0 18px; position: relative; z-index: 1; }
 .landing-content h1 { margin: 0 0 38px; color: #30234d; font-size: clamp(64px, 11vw, 132px); font-weight: 500; line-height: .84; letter-spacing: -.065em; }
 .landing-content h1 em { color: #c77c68; font-style: normal; }
-.landing-copy { max-width: 470px; color: #514765; font-size: clamp(22px, 3vw, 31px); line-height: 1.55; margin-bottom: 44px; }
+.landing-copy { max-width: 470px; color: #514765; font-size: 18px; line-height: 1.55; margin-bottom: 44px; font-family: "Montserrat", sans-serif; }
 .landing-content .eyebrow { color: #5f4b70; }
 .compass-orbit { width: 146px; height: 146px; margin: 38px 0 54px; font-size: 38px; }
 .landing-rule { width: 100%; height: 1px; background: rgba(82, 62, 102, .25); }
-.landing-tip { max-width: 470px; color: #625477; font-size: 19px; line-height: 1.6; margin: 34px 0 26px; }
+.landing-tip { max-width: 470px; color: #625477; font-size: 19px; line-height: 1.6; margin: 34px 0 26px; font-family: "Montserrat", sans-serif; }
 .landing-tip strong { color: #426b54; }
-.start-button { border: 0; background: #5f3c8d; color: #fff; padding: 15px 21px; display: inline-flex; align-items: center; gap: 13px; font-size: 14px; }
+.start-button { border: 0; background: #5f3c8d; color: #fff; padding: 15px 21px; display: inline-flex; align-items: center; gap: 13px; font-size: 14px; font-family: "Montserrat", sans-serif; }
 .question-page { width: min(100%, 760px); margin: auto; padding: 42px 0 56px; position: relative; z-index: 1; }
 .question-card { border-radius: 18px; }
 .option { font-size: 16px; padding: 16px; color: #514765; }
