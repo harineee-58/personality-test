@@ -100,6 +100,38 @@ h1, h2, h3, p, button, input, textarea, label, span { font-family: Cambria, Geor
 .answer-list span { min-width: 120px; }
 @media (max-width: 700px) { .thank-you-card { padding: 38px 24px; } .admin-result-detail { padding: 32px 22px; } .admin-result-detail .result-grid { grid-template-columns: 1fr; gap: 18px; } }
 
+.welcome-layout { width: 100%; flex: 1; display: grid; place-items: center; padding: 40px 0; }
+.welcome-window { width: min(860px, 100%); overflow: hidden; border: 2px solid #91401f; border-radius: 10px; background: #fff8ef; box-shadow: 5px 5px 0 rgba(145,64,31,.25); }
+.welcome-browser-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 2px solid #91401f; background: #f6b8a8; color: #853c21; font-size: 13px; letter-spacing: .08em; }
+.welcome-browser-bar span:last-child { font-size: 18px; line-height: 1; }
+.welcome-window > .eyebrow { margin: 28px 38px 14px; }
+.welcome-window h1 { margin: 0 38px 12px; color: #71341f; font-size: clamp(43px, 7vw, 72px); font-weight: 500; line-height: .98; letter-spacing: -.04em; }
+.welcome-window h1 em { color: #a64f30; font-style: normal; }
+.welcome-copy { margin: 0 38px; max-width: 570px; color: #80513d; font-size: 17px; line-height: 1.65; }
+.welcome-illustration { position: relative; display: flex; align-items: center; justify-content: center; height: 180px; margin: 26px 24px 0; overflow: hidden; border: 1px solid #a64f30; background: linear-gradient(180deg, #f8c8ba 0 60%, #f3b29e 60%); }
+.welcome-illustration::after { content: ''; position: absolute; bottom: -38px; left: -5%; width: 110%; height: 82px; border: 2px solid #a64f30; border-radius: 50% 50% 0 0; background: #ffd9ca; }
+.welcome-sun { position: absolute; top: 24px; left: 24%; width: 42px; height: 42px; border: 2px solid #91401f; border-radius: 50%; background: #ffe2b9; box-shadow: 0 0 0 9px rgba(255,226,185,.3); }
+.welcome-cloud { position: absolute; z-index: 1; color: #91401f; font-size: 45px; line-height: 1; }
+.welcome-cloud-one { top: 20px; right: 21%; }
+.welcome-cloud-two { top: 76px; left: 18%; font-size: 24px; color: #fff8ef; }
+.welcome-compass { position: relative; z-index: 2; display: grid; place-items: center; width: 80px; height: 80px; border: 2px solid #91401f; border-radius: 50%; background: rgba(255,248,239,.86); color: #a64f30; font-size: 44px; box-shadow: 0 0 0 10px rgba(255,248,239,.28); }
+.welcome-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 38px 28px; }
+.welcome-footer p { max-width: 410px; margin: 0; color: #80513d; font-size: 13px; line-height: 1.6; }
+.welcome-footer p strong { color: #71341f; }
+.welcome-start { flex: 0 0 auto; }
+.quiz-layout.quiz-active { grid-template-columns: minmax(0, 760px); justify-content: center; gap: 0; }
+.quiz-layout.quiz-active .intro-panel { display: none; }
+.quiz-layout.quiz-active .question-card { width: 100%; }
+@media (max-width: 600px) {
+  .welcome-layout { padding: 30px 0; }
+  .welcome-window > .eyebrow { margin: 24px 22px 12px; }
+  .welcome-window h1, .welcome-copy { margin-right: 22px; margin-left: 22px; }
+  .welcome-copy { font-size: 15px; }
+  .welcome-illustration { height: 145px; margin: 22px 14px 0; }
+  .welcome-footer { align-items: stretch; flex-direction: column; padding: 18px 22px 24px; }
+  .welcome-start { justify-content: center; }
+}
+
 :root {
   --background: #ffede4;
   --foreground: #71341f;
